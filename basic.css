@@ -1,0 +1,66 @@
+
+
+#tudlist {
+    margin-bottom: 20px;
+}
+
+#tudlist span {
+    background-color: black;
+    color: wheat;
+    padding: 5px;
+    cursor: pointer;
+}
+
+
+.edittext {
+    display: none;
+}
+
+.edittext.showed {
+    display: inline !important;
+}
+
+
+.item {
+    margin-bottom: 20px;
+}
+
+.item .name {
+    padding: 5px 15px;
+    border: 1px solid rgb(128, 108, 82);
+}
+
+
+.item .name.hidden {
+    display: none;
+}
+
+
+.item.maded {
+    text-decoration: line-through;
+}
+
+.okBtn.showed {
+    display: inline;
+}
+
+
+.delBtn, .okBtn, .madedBtn, .editBtn {
+    margin: 0 5px;
+    border: 1px solid red;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.okBtn {
+    display: none;
+}
+
+
+
+.delBtn.hidden, .editBtn.hidden, .madedBtn.hidden {
+    display: none;
+}
+
+
+

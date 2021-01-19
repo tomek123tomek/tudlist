@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<title>hi</title>
+		<link rel="stylesheet" href='basic.css'>
+		<!--
+			<link rel="stylesheet" href='bootstrap.min.css'>
+			<script src='x.js'></script>
+		-->
+	</head>
+
+<body>
+
+	<div id="tudlist">
+		<div>Dudu List</div>
+		<input type="text" id="input1">
+		<span onclick="add()">Add</span>
+	</div>
+
+	<div id="cont1">
+		<div class="item">
+			<span class="name name0">Bieganko</span>
+			<input type="text" id="edittext0" class="edittext" />
+			<span class="delBtn delBtn0">DELETE</span>
+			<span class="madedBtn madedBtn0">MADED</span>
+			<span class="editBtn editBtn0">EDIT</span>
+			<span class="okBtn okBtn0">OK</span>
+		</div>
+		<div class="item">
+			<span class="name name1">Umyc naczynia</span>
+			<input type="text" id="edittext1" class="edittext" />
+			<span class="delBtn delBtn1">DELETE</span>
+			<span class="madedBtn madedBtn1">MADED</span>
+			<span class="editBtn editBtn1">EDIT</span>
+			<span class="okBtn okBtn1">OK</span>
+		</div>
+	</div>
+
+
+</body>
+
+<script>
+
+	function getRndInteger(min, max) {
+	  	return Math.floor(Math.random() * (max - min)) + min;
+	}
+
+
+	var addedCount = 2;
+
+	var toDoItems = document.getElementsByClassName("delBtn");
+
+	for (let i = 0; i < toDoItems.length; i++) {
+		toDoItems[i].onclick = function() {
+			var div = this.parentElement;
+			var par = div.parentElement;
+			par.removeChild(div);
+		}
+	}
+
+
+	var madedBtn1 = document.getElementsByClassName("madedBtn");
+
+	for (let i = 0; i < madedBtn1.length; i++) {
+		madedBtn1[i].onclick = function() {
+			let div1 = this.parentElement;
+			div1.classList.toggle('maded');
+		}
+
+	}
+
+
+	var editBtn = document.getElementsByClassName("editBtn");
+
+	for (let i = 0; i < editBtn.length; i++) {
+		editBtn[i].onclick = function() {
+			let d1 = document.getElementById("edittext" + i);
+			d1.classList.toggle("showed");
+			d1.value = document.getElementsByClassName("name" + i)[0].innerHTML;
+
+			togglujHiddeny(i);
+		}
+
+	}
+
+
+
+
+	var okBtns = document.getElementsByClassName("okBtn");
+
+	for (let i = 0; i < okBtns.length; i++) {
+		okBtns[i].onclick = function() {
+			let d1 = document.getElementById("edittext" + i);
+			d1.classList.toggle("showed");
+			document.getElementsByClassName("name" + i)[0].innerHTML = d1.value;
+
+			togglujHiddeny(i);
+		}
+
+	}
+
+
+
+
+	/*
+	item.addEventListener('click', function(ev) {
+		ev.target.classList.toggle('checked');
+	*/
+
+	function togglujHiddeny(i) {
+		document.getElementsByClassName("name" + i)[0].classList.toggle("hidden");
+		document.getElementsByClassName("delBtn" + i)[0].classList.toggle("hidden");
+		document.getElementsByClassName("editBtn" + i)[0].classList.toggle("hidden");
+		document.getElementsByClassName("madedBtn" + i)[0].classList.toggle("hidden");
+		document.getElementsByClassName("okBtn" + i)[0].classList.toggle("showed");
+	}
+
+
+	function add() {
+
+		var divek = document.createElement("div");
+			divek.className = "item"
+
+
+		var inputValue = document.getElementById("input1").value;
+
+		var span0 = document.createElement("span");
+		var t = document.createTextNode(inputValue);
+		span0.setAttribute("class", "name name" + addedCount);
+		span0.appendChild(t);
+		divek.appendChild(span0);
+
+		if (inputValue === '') {
+			alert("Nothing?!");
+		} else {
+			document.getElementById("cont1").appendChild(divek);
+		}
+
+
+		document.getElementById("input1").value = "";
+
+		var span = document.createElement("span");
+		var txt = document.createTextNode("DELETE");
+		span.className = "delBtn delBtn" + addedCount;
+		span.appendChild(txt);
+		span.onclick = function() {
+			var div = this.parentElement;
+			var par = div.parentElement;
+			par.removeChild(div);
+		}
+
+		divek.appendChild(span);
+
+
+		var span21 = document.createElement("input");
+		span21.setAttribute("id", "edittext" + addedCount);
+		span21.setAttribute("class", "edittext");
+		span21.setAttribute("type", "text");
+
+		divek.appendChild(span21);
+
+
+		var span2 = document.createElement("span");
+		var txt2 = document.createTextNode("MADED");
+		span2.className = "madedBtn madedBtn" + addedCount;
+		span2.appendChild(txt2);
+		span2.onclick = function() {
+			let div1 = this.parentElement;
+			div1.classList.toggle('maded');
+		}
+
+		divek.appendChild(span2);
+
+		var span3 = document.createElement("span");
+		var txt2 = document.createTextNode("EDIT");
+		span3.setAttribute("id", "editBtn" + addedCount);
+		span3.setAttribute("class", "editBtn editBtn" + addedCount);
+		span3.appendChild(txt2);
+		span3.onclick = function() {
+
+
+			let x = this.id;
+			let index = x.substr(7);
+
+			let d1 = document.getElementById("edittext" + index);
+			d1.classList.toggle("showed");
+			d1.value = document.getElementsByClassName("name" + index)[0].innerHTML;
+
+			togglujHiddeny(index);
+		}
+
+		divek.appendChild(span3);
+
+
+		var ok = document.createElement("span");
+		var txt4 = document.createTextNode("OK");
+		ok.setAttribute("id", "okBtn" + addedCount);
+		ok.setAttribute("class", "okBtn okBtn" + addedCount++);
+		ok.onclick = function() {
+			let x = this.id.substr(5);
+
+			let d1 = document.getElementById("edittext" + x);
+			d1.classList.toggle("showed");
+			document.getElementsByClassName("name" + x)[0].innerHTML = d1.value;
+
+			togglujHiddeny(x);
+		}
+		ok.appendChild(txt4);
+
+		divek.appendChild(ok);
+
+	}
+
+
+	// test git
+
+</script>
+
+
+</html>
