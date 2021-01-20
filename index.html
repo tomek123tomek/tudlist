@@ -15,11 +15,12 @@
 	<div id="tudlist">
 		<div>Dudu List</div>
 		<input type="text" id="input1">
-		<span onclick="add()">Add</span>
+		<span onclick="testAddTask()">Add</span>
 	</div>
 
 	<div id="taskContainer"></div>
 
+	<div id="testPlace"></div>
 
 </body>
 
@@ -30,16 +31,18 @@
 	}
 
 
-	var addedCount = 3;
+	var addedCount = 0;
+	var justRemoved = null;
 
 	var tasks = [
-		{ 'name': 'bieganko', 'done': false },
-		{ 'name': 'posprzatac kuwetke', 'done': false },
+		{'id': 0, 'name': 'bieganko', 'done': false, 'editOpen': false },
+		{'id': 1, 'name': 'posprzatac kuwetke', 'done': false, 'editOpen': false },
 	]
 
 
 	for(let i=0; i < tasks.length; i++) {
 		addNewTask(tasks[i]);
+		addedCount++;
 	}
 
 
@@ -50,6 +53,148 @@
 		document.getElementsByClassName("madedBtn" + i)[0].classList.toggle("hidden");
 		document.getElementsByClassName("okBtn" + i)[0].classList.toggle("showed");
 	}
+
+	function testAddTask(taskData) {
+		var inputValue = document.getElementById("input1").value;
+		addedCount = getNextId();
+		tasks.push({'id': addedCount, 'name': inputValue, 'done': false, 'editOpen': false});
+		addNewTask();
+	}
+
+
+
+	function findRemovedTasks() {
+
+		let el = document.getElementsByClassName("item");
+
+		let indexToDelete = null;
+
+		if(tasks.length == 0) {
+			document.getElementById("taskContainer").removeChild(el[0]);
+			return;
+		}
+
+		for (let i = 0; i < el.length; i++) {
+			const element = el[i];
+
+			let id = parseInt(el[i].id.substr(4));
+
+			const elem2 = document.getElementsByClassName("name" + id)[0].innerHTML;
+
+			if(justRemoved['name'] && (justRemoved['name'] ===  elem2)) {
+				found = false;
+				document.getElementById("taskContainer").removeChild(document.getElementById("item" + id));
+				return;
+			}
+
+		}
+
+	}
+
+	function getNextId() {
+		if(tasks.length == 0) return 0;
+		let x = tasks[tasks.length - 1]['id'];
+		return (x + 1);
+	}
+
+
+
+	function updateView() {
+
+		for (let i = 0; i < tasks.length; i++) {
+			const element = tasks[i];
+
+			let el = document.getElementsByClassName("item" + tasks[i]['id']);
+
+
+			if(el.length > 0) {
+				let htmlName = document.getElementsByClassName("name" + tasks[i]['id'])[0].innerHTML;
+
+				if(element['name'] !== htmlName) {
+					document.getElementsByClassName("name" + tasks[i]['id'])[0].innerHTML = element['name'];
+				}
+
+
+				let d1 = document.getElementById("edittext" + tasks[i]['id']);
+
+				if(element['editOpen']) {
+
+					d1.classList.add("showed");
+					d1.value = document.getElementsByClassName("name" + tasks[i]['id'])[0].innerHTML;
+
+					document.getElementsByClassName("name" + tasks[i]['id'])[0].classList.add("hidden");
+					document.getElementsByClassName("delBtn" + tasks[i]['id'])[0].classList.add("hidden");
+					document.getElementsByClassName("editBtn" + tasks[i]['id'])[0].classList.add("hidden");
+					document.getElementsByClassName("madedBtn" + tasks[i]['id'])[0].classList.add("hidden");
+					document.getElementsByClassName("okBtn" + tasks[i]['id'])[0].classList.add("showed");
+
+				} else {
+
+					d1.classList.remove("showed");
+					d1.value = "";
+
+					document.getElementsByClassName("name" + tasks[i]['id'])[0].classList.remove("hidden");
+					document.getElementsByClassName("delBtn" + tasks[i]['id'])[0].classList.remove("hidden");
+					document.getElementsByClassName("editBtn" + tasks[i]['id'])[0].classList.remove("hidden");
+					document.getElementsByClassName("madedBtn" + tasks[i]['id'])[0].classList.remove("hidden");
+					document.getElementsByClassName("okBtn" + tasks[i]['id'])[0].classList.remove("showed");
+				}
+
+
+				if(element['done']) {
+					document.getElementsByClassName('item' + tasks[i]['id'])[0].classList.add("maded");
+				} else {
+					document.getElementsByClassName('item' +tasks[i]['id'])[0].classList.remove("maded");
+				}
+			}
+		}
+	}
+
+
+	function editTask(index) {
+
+		let x = tasks.find((el, idx) => { console.log(idx); console.log(index); return el['id'] === index});
+
+		x['editOpen'] = true;
+
+		updateView();
+	}
+
+
+	function toggleDone(index) {
+
+		let x = tasks.find((el, idx) => { return idx === index});
+
+		x['done'] = !x['done'];
+
+		updateView();
+	}
+
+
+
+	function acceptEdit(index) {
+
+		let x = tasks.find((el, idx) => { console.log(idx); console.log(index); return el['id'] === index});
+
+		x['editOpen'] = false;
+		x['name'] = document.getElementById("edittext" + index).value;
+
+		updateView();
+	}
+
+
+	function removeTask(name) {
+
+		let x = tasks.findIndex((el, idx) => { return el['name'] === name});
+
+		justRemoved = tasks[x];
+
+		tasks.splice(x, 1);
+
+		findRemovedTasks();
+		updateView();
+	}
+
 
 
 	function addNewTask(task) {
@@ -71,88 +216,88 @@
 
 
 		var divek = document.createElement("div");
-			divek.className = "item"
+			divek.className = "item item" + addedCount;
+			divek.setAttribute("id", "item" + addedCount);
 
 		document.getElementById("taskContainer").appendChild(divek);
 
 
 		var span0 = document.createElement("span");
-		var txt0 = document.createTextNode(inputValue);
-		span0.setAttribute("class", "name name" + addedCount);
-		span0.appendChild(txt0);
+			span0.setAttribute("class", "name name" + addedCount);
+			span0.appendChild(document.createTextNode(inputValue));
+
 		divek.appendChild(span0);
 
 
+
 		var span = document.createElement("span");
-		var txt1 = document.createTextNode("DELETE");
-		span.className = "delBtn delBtn" + addedCount;
-		span.appendChild(txt1);
-		span.onclick = function() {
-			var div = this.parentElement;
-			var par = div.parentElement;
-			par.removeChild(div);
-		}
+			span.setAttribute("id", "delBtn" + addedCount);
+			span.className = "delBtn delBtn" + addedCount;
+			span.appendChild(document.createTextNode("DELETE"));
+			span.onclick = function() {
+
+				let index = parseInt(this.id.substr(6));
+				let name = document.getElementsByClassName("name" + index)[0].innerHTML;
+
+				removeTask(name);
+
+			}
+
 
 		divek.appendChild(span);
 
 
 		var span21 = document.createElement("input");
-		span21.setAttribute("type", "text");
-		span21.setAttribute("id", "edittext" + addedCount);
-		span21.className = "edittext";
+			span21.setAttribute("type", "text");
+			span21.setAttribute("id", "edittext" + addedCount);
+			span21.className = "edittext";
 
 
 		divek.appendChild(span21);
 
 
 		var span2 = document.createElement("span");
-		var txt2 = document.createTextNode("MADED");
-		span2.className = "madedBtn madedBtn" + addedCount;
-		span2.appendChild(txt2);
-		span2.onclick = function() {
-			this.parentElement.classList.toggle('maded');
-		}
+			span2.className = "madedBtn madedBtn" + addedCount;
+			span2.setAttribute("id", "madedBtn" + addedCount);
+			span2.appendChild(document.createTextNode("MADED"));
+			span2.onclick = function() {
+
+				let index = parseInt(this.id.substr(8));
+				toggleDone(index);
+			}
 
 		divek.appendChild(span2);
 
+
+
 		var span3 = document.createElement("span");
-		var txt3 = document.createTextNode("EDIT");
-		span3.setAttribute("id", "editBtn" + addedCount);
-		span3.className = "editBtn editBtn" + addedCount;
-		span3.appendChild(txt3);
-		span3.onclick = function() {
-			let index = this.id.substr(7);
+			span3.setAttribute("id", "editBtn" + addedCount);
+			span3.className = "editBtn editBtn" + addedCount;
+			span3.appendChild(document.createTextNode("EDIT"));
+			span3.onclick = function() {
+				let index = parseInt(this.id.substr(7));
 
-			let d1 = document.getElementById("edittext" + index);
-			d1.classList.toggle("showed");
-			d1.value = document.getElementsByClassName("name" + index)[0].innerHTML;
-
-			toggleHiddens(index);
-		}
+				editTask(index);
+			}
 
 		divek.appendChild(span3);
 
 
+
 		var ok = document.createElement("span");
-		var txt4 = document.createTextNode("OK");
-		ok.setAttribute("id", "okBtn" + addedCount);
-		ok.classList = "okBtn okBtn" + addedCount;
-		ok.onclick = function() {
-			let x = this.id.substr(5);
+			ok.setAttribute("id", "okBtn" + addedCount);
+			ok.classList = "okBtn okBtn" + addedCount;
+			ok.appendChild(document.createTextNode("OK"));
+			ok.onclick = function() {
+				let x = parseInt(this.id.substr(5));
 
-			let d1 = document.getElementById("edittext" + x);
-			d1.classList.toggle("showed");
-			document.getElementsByClassName("name" + x)[0].innerHTML = d1.value;
+				acceptEdit(x);
+			}
 
-			toggleHiddens(x);
-		}
-		ok.appendChild(txt4);
 
 		divek.appendChild(ok);
 
-
-
-		addedCount++;
+		updateView();
 
 	}
 
