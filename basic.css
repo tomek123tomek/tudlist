@@ -1,4 +1,14 @@
 
+* {
+    padding: 0;
+    margin: 0;
+}
+
+
+body {
+    margin: 20px;
+}
+
 
 #tudlist {
     margin-bottom: 20px;
@@ -14,6 +24,7 @@
 
 .edittext {
     display: none;
+    padding: 5px 5px;
 }
 
 .edittext.showed {
@@ -61,6 +72,4 @@
 .delBtn.hidden, .editBtn.hidden, .madedBtn.hidden {
     display: none;
 }
-
-
 
