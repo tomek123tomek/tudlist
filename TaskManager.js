@@ -8,11 +8,12 @@ var TaskManager = (function() {
 
     var justRemoved = null;
 
+    var nowEditing = null;
+
     const _addTask = (name) => {
         const val = name ? name : TaskView.getTaskValue();
         if(!val) return;
-		addedCount = _getNextId();
-		tasks.push({'id': addedCount, 'name': val, 'done': false, 'editOpen': false});
+        tasks.push(new Task(val));
 
         TaskView.updateView();
 
@@ -21,9 +22,9 @@ var TaskManager = (function() {
 
 
     const _deleteTask = (name) => {
-        const x = tasks.findIndex(el => el['name'] === name);
+        const x = tasks.findIndex(el => el.getName() === name);
 
-		justRemoved = tasks[x];
+        justRemoved = tasks[x];
 
 		tasks.splice(x, 1);
 
@@ -33,27 +34,28 @@ var TaskManager = (function() {
 
 
     const _editTask = (index) => {
-        const x = tasks.find(el => el['id'] === index);
+        const x = tasks.find(el => el.getId() === index);
 
-		x['editOpen'] = true;
+        nowEditing = x.getId();
 
         TaskView.updateView();
     }
 
 
     const _confirmEditTask = (index) => {
-        const x = tasks.find(el => el['id'] === index);
+        const x = tasks.find(el => el.getId() === index);
 
-		x['editOpen'] = false;
-		x['name'] = document.getElementById("edittext" + index).value;
+        x.setName(document.getElementById("edittext" + index).value);
+
+        nowEditing = null;
 
         TaskView.updateView();
     }
 
     const _toggleMaded = (index) => {
-        const x = tasks.find(el => el['id'] === index);
+        const x = tasks.find(el => el.getId() === index);
 
-        x['done'] = !x['done'];
+        x.setDone( !x.getDone() );
 
         TaskView.updateView();
     }
@@ -62,10 +64,10 @@ var TaskManager = (function() {
         return addedCount;
     }
 
-	const _getNextId = () => {
+    const _getNextId = () => {
 		if(tasks.length == 0) return 0;
-		const x = tasks[tasks.length - 1]['id'];
-		return (x + 1);
+		const x = tasks[tasks.length - 1].getId();
+		return x;
 	}
 
     return {
@@ -75,8 +77,10 @@ var TaskManager = (function() {
         confirmEditTask: _confirmEditTask,
         toggleMaded: _toggleMaded,
         getAddedCount: _getAddedCount,
+        getNextId: _getNextId,
 
-        getTasks() { return tasks; }
+        getTasks() { return tasks; },
+        getNowEditing() { return nowEditing; }
 
    }
 

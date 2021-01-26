@@ -27,7 +27,7 @@ var TaskView = (function() {
 			const id = parseInt(el[i].id.substr(4));
 			const taskName = document.getElementsByClassName("name" + id)[0].innerHTML;
 
-			if(justRemovedTask['name'] && (justRemovedTask['name'] === taskName)) {
+			if(justRemovedTask.getName() && (justRemovedTask.getName() === taskName)) {
 				document.getElementById("taskContainer").removeChild(document.getElementById("item" + id));
 				return;
 			}
@@ -45,18 +45,18 @@ var TaskView = (function() {
         for (let i = 0; i < tasks.length; i++) {
 
 			const element = tasks[i];
-			const _id = tasks[i]['id'];
+			const _id = tasks[i].getId();
 			const el = document.getElementsByClassName("item" + _id);
 
 			if(el.length > 0) {
 				const htmlName = document.getElementsByClassName("name" + _id)[0].innerHTML;
 
-				if(element['name'] !== htmlName)
-					document.getElementsByClassName("name" + _id)[0].innerHTML = element['name'];
+				if(element.getName() !== htmlName)
+					document.getElementsByClassName("name" + _id)[0].innerHTML = element.getName();
 
 				const editText = document.getElementById("edittext" + _id);
 
-				if(element['editOpen']) {
+				if(TaskManager.getNowEditing() === _id) {
 
 					editText.classList.add("showed");
 					editText.value = document.getElementsByClassName("name" + _id)[0].innerHTML;
@@ -79,14 +79,14 @@ var TaskView = (function() {
 					document.getElementsByClassName("okBtn" + _id)[0].classList.remove("showed");
 				}
 
-				if(element['done']) {
+				if(element.getDone()) {
 					document.getElementsByClassName('item' + _id)[0].classList.add("maded");
 				} else {
 					document.getElementsByClassName('item' +_id)[0].classList.remove("maded");
                 }
 
 			} else {
-                TaskBuilder.createNewTaskView(tasks[i]['name']);
+                TaskBuilder.createNewTaskView(tasks[i].getName());
             }
         }
 

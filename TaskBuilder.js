@@ -7,7 +7,7 @@ var TaskBuilder = (function() {
     var addedCount = null;
 
     const _createNewTaskView = (name) => {
-        addedCount = TaskManager.getAddedCount();
+        addedCount = TaskManager.getNextId();
 
         _createMainDiv();
         _createTaskNameSpan(name);
