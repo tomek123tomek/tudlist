@@ -6,8 +6,8 @@ var TaskBuilder = (function() {
 
     var addedCount = null;
 
-    const _createNewTaskView = (name) => {
-        addedCount = TaskManager.getNextId();
+    const _createNewTaskView = (name, id) => {
+        addedCount = id //TaskManager.getNextId();
 
         _createMainDiv();
         _createTaskNameSpan(name);
@@ -16,6 +16,7 @@ var TaskBuilder = (function() {
         _createMadedBtn();
         _createEditBtn();
         _createOkBtn();
+        _createImportant();
 
     }
 
@@ -93,6 +94,16 @@ var TaskBuilder = (function() {
 				const x = parseInt(this.id.substr(5));
 				TaskManager.confirmEditTask(x);
 			}
+
+        tempMainDiv.appendChild(ok);
+    }
+
+
+    const _createImportant = () => {
+		const ok = document.createElement("span");
+			ok.setAttribute("id", "importantBtn" + addedCount);
+			ok.classList = "importantBtn importantBtn" + addedCount;
+			ok.appendChild(document.createTextNode("!! IMPORTANT TASK !!"));
 
         tempMainDiv.appendChild(ok);
     }

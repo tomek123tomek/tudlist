@@ -4,13 +4,13 @@ var Task = (function () {
     var numOfTasks = 0;
 
     function checkId(_id) {
-        // check if id is already used
-        return true;
+        return TaskManager.checkIfIdIsUsed(_id);
     }
 
-    return function (name_) {
+    return function (name_, important_) {
 
         var done = false;
+        var important = important_;
         var id, name;
 
         this.getNumOfTask = function () {
@@ -38,6 +38,14 @@ var Task = (function () {
 
         this.setDone = function (done_) {
             done = done_;
+        };
+
+        this.getImportant = function () {
+            return important;
+        };
+
+        this.setImportant = function (important_) {
+            important = important_;
         };
 
         this.setId(numOfTasks);

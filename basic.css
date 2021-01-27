@@ -69,7 +69,7 @@ body {
 
 
 
-.delBtn.hidden, .editBtn.hidden, .madedBtn.hidden {
+.delBtn.hidden, .editBtn.hidden, .madedBtn.hidden, .importantBtn.hidden {
     display: none;
 }
 

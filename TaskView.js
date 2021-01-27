@@ -5,7 +5,8 @@ var TaskView = (function() {
     const _getTaskValue = () => {
         const value = document.getElementById("input1").value;
         if(Validator.validateInput(value)) {
-            return value;
+			const impo = document.getElementById("impo").checked;
+            return [value, impo];
         } else {
             alert("EMPTY");
             return false;
@@ -37,60 +38,88 @@ var TaskView = (function() {
 
     const _clearInput = () => {
         document.getElementById("input1").value = "";
+	}
+
+	const _deleteAllTasks = () => {
+		const el = document.getElementsByClassName("item");
+
+		while(el.length > 0) {
+			document.getElementById("taskContainer").removeChild(el[el.length - 1]);
+		}
     }
 
     const _updateView = () => {
-        const tasks = TaskManager.getTasks();
+		_deleteAllTasks();
 
-        for (let i = 0; i < tasks.length; i++) {
+		const tasks = TaskManager.getTasks();
+		let newTasks = [];
+		if(TaskManager.isAnyImportantTask()) {
+			let tasksIm = tasks.filter(el => el.getImportant());
+			let tasksNotIm = tasks.filter(el => !el.getImportant());
 
-			const element = tasks[i];
-			const _id = tasks[i].getId();
-			const el = document.getElementsByClassName("item" + _id);
+			newTasks = [...tasksIm, ...tasksNotIm];
+
+			newTasks.forEach(function(item) {
+				TaskBuilder.createNewTaskView(item.getName(), item.getId());
+			});
+		} else {
+			newTasks = tasks;
+		}
+
+
+        for (let i = 0; i < newTasks.length; i++) {
+
+			const element = newTasks[i];
+			const _nowId = newTasks[i].getId();
+			const el = document.getElementsByClassName("item" + _nowId);
 
 			if(el.length > 0) {
-				const htmlName = document.getElementsByClassName("name" + _id)[0].innerHTML;
+				const htmlName = document.getElementsByClassName("name" + _nowId)[0].innerHTML;
 
 				if(element.getName() !== htmlName)
-					document.getElementsByClassName("name" + _id)[0].innerHTML = element.getName();
+					document.getElementsByClassName("name" + _nowId)[0].innerHTML = element.getName();
 
-				const editText = document.getElementById("edittext" + _id);
+				const editText = document.getElementById("edittext" + _nowId);
 
-				if(TaskManager.getNowEditing() === _id) {
+				if(TaskManager.getNowEditing() === _nowId) {
 
 					editText.classList.add("showed");
-					editText.value = document.getElementsByClassName("name" + _id)[0].innerHTML;
+					editText.value = document.getElementsByClassName("name" + _nowId)[0].innerHTML;
 
-					document.getElementsByClassName("name" + _id)[0].classList.add("hidden");
-					document.getElementsByClassName("delBtn" + _id)[0].classList.add("hidden");
-					document.getElementsByClassName("editBtn" + _id)[0].classList.add("hidden");
-					document.getElementsByClassName("madedBtn" + _id)[0].classList.add("hidden");
-					document.getElementsByClassName("okBtn" + _id)[0].classList.add("showed");
+					document.getElementsByClassName("name" + _nowId)[0].classList.add("hidden");
+					document.getElementsByClassName("delBtn" + _nowId)[0].classList.add("hidden");
+					document.getElementsByClassName("editBtn" + _nowId)[0].classList.add("hidden");
+					document.getElementsByClassName("madedBtn" + _nowId)[0].classList.add("hidden");
+					document.getElementsByClassName("okBtn" + _nowId)[0].classList.add("showed");
 
 				} else {
 
 					editText.classList.remove("showed");
 					editText.value = "";
 
-					document.getElementsByClassName("name" + _id)[0].classList.remove("hidden");
-					document.getElementsByClassName("delBtn" + _id)[0].classList.remove("hidden");
-					document.getElementsByClassName("editBtn" + _id)[0].classList.remove("hidden");
-					document.getElementsByClassName("madedBtn" + _id)[0].classList.remove("hidden");
-					document.getElementsByClassName("okBtn" + _id)[0].classList.remove("showed");
+					document.getElementsByClassName("name" + _nowId)[0].classList.remove("hidden");
+					document.getElementsByClassName("delBtn" + _nowId)[0].classList.remove("hidden");
+					document.getElementsByClassName("editBtn" + _nowId)[0].classList.remove("hidden");
+					document.getElementsByClassName("madedBtn" + _nowId)[0].classList.remove("hidden");
+					document.getElementsByClassName("okBtn" + _nowId)[0].classList.remove("showed");
 				}
 
 				if(element.getDone()) {
-					document.getElementsByClassName('item' + _id)[0].classList.add("maded");
+					document.getElementsByClassName('item' + _nowId)[0].classList.add("maded");
 				} else {
-					document.getElementsByClassName('item' +_id)[0].classList.remove("maded");
+					document.getElementsByClassName('item' +_nowId)[0].classList.remove("maded");
+				}
+
+				if(element.getImportant()) {
+					document.getElementsByClassName('importantBtn' + _nowId)[0].classList.remove("hidden");
+				} else {
+					document.getElementsByClassName('importantBtn' +_nowId)[0].classList.add("hidden");
                 }
 
-			} else {
-                TaskBuilder.createNewTaskView(tasks[i].getName());
-            }
+			}
         }
 
-        _clearInput();
+        //_clearInput();
 
     }
 
