@@ -1,103 +1,100 @@
 
 
-var TaskManager = (function() {
+class TaskManager {
 
-    var addedCount = 0;
+    static #addedCount = 0;
 
-    var tasks = [];
+    static #tasks = [];
 
-    var justRemoved = null;
+    static #justRemoved = null;
 
-    var nowEditing = null;
+    static #nowEditing = null;
 
-    const _addTask = (name) => {
+    static addTask = (name) => {
         const val = name ? name : TaskView.getTaskValue();
         if(!val) return;
-        if(_taskAlreadyExist(val[0])) return;
-        tasks.push(new Task(val[0], val[1]));
+        if(this.taskAlreadyExist(val[0])) return;
+        this.#tasks.push(new Task(this.#addedCount, val[0], val[1]));
 
         TaskView.updateView();
 
-        addedCount++;
+        this.#addedCount++;
     }
 
 
-    const _deleteTask = (name) => {
-        if(_isSomeActionAlready()) return;
+    static deleteTask = (name) => {
+        if(this.isSomeActionAlready()) return;
 
-        const x = tasks.findIndex(el => el.getName() === name);
+        const x = this.#tasks.findIndex(el => el.getName() === name);
 
-        justRemoved = tasks[x];
+        this.#justRemoved = this.#tasks[x];
 
-		tasks.splice(x, 1);
+        this.#tasks.splice(x, 1);
 
-		TaskView.findRemovedTasks(justRemoved);
+        this.#addedCount--;
+
+        TaskView.removeTask(this.#justRemoved);
+    }
+
+
+    static editTask = (index) => {
+        if(this.isSomeActionAlready(index)) return;
+        const x = this.#tasks.find(el => el.getId() === index);
+
+        this.#nowEditing = x.getId();
+
         TaskView.updateView();
     }
 
 
-    const _editTask = (index) => {
-        if(_isSomeActionAlready(index)) return;
-        const x = tasks.find(el => el.getId() === index);
-
-        nowEditing = x.getId();
-
-        TaskView.updateView();
-    }
-
-
-    const _confirmEditTask = (index) => {
-        if(_isSomeActionAlready(index)) return;
+    static confirmEditTask = (index) => {
+        if(this.isSomeActionAlready(index)) return;
 
         const text = document.getElementById("edittext" + index).value;
 
-        if(_taskAlreadyExist(text)) return;
+        if(this.taskAlreadyExist(text)) return;
 
-        const x = tasks.find(el => el.getId() === index);
+        const x = this.#tasks.find(el => el.getId() === index);
 
         x.setName(text);
 
-        nowEditing = null;
+        this.#nowEditing = null;
 
         TaskView.updateView();
     }
 
-    const _toggleMaded = (index) => {
-        const x = tasks.find(el => el.getId() === index);
+    static toggleMaded = (index) => {
+        const x = this.#tasks.find(el => el.getId() === index);
 
         x.setDone( !x.getDone() );
 
         TaskView.updateView();
     }
 
-    const _toggleImportant = (index) => {
-        const x = tasks.find(el => el.getId() === index);
+    static toggleImportant = (index) => {
+        const x = this.#tasks.find(el => el.getId() === index);
 
         x.getImportant( !x.getImportant() );
 
         TaskView.updateView();
     }
 
-    const _getAddedCount = () => {
-        return addedCount;
-    }
-
-    const _getNextId = () => {
-		if(tasks.length == 0) return 0;
-		const x = tasks[tasks.length - 1].getId();
+    static getNextId = () => {
+		if(this.#tasks.length == 0) return 0;
+		const x = this.#tasks[this.#tasks.length - 1].getId();
 		return x + 1;
     }
 
-    const _checkIfIdIsUsed = (id) => {
-        const x = tasks.find(el => el.getId() === id);
+    static checkIfIdIsUsed = (id) => {
+        const x = this.#tasks.find(el => el.getId() === id);
         return (x) ? false : true;
     }
 
-    const _isSomeActionAlready = (index) => {
+    static isSomeActionAlready = (index) => {
 
-        if(typeof(nowEditing) == 'number') {
-            if(index !== nowEditing) {
-                ErrorDiv.setErrorInfo("already editing task index: " + nowEditing);
+        if(typeof(this.#nowEditing) == 'number') {
+            if(index !== this.#nowEditing) {
+                ErrorDiv.setErrorInfo("already editing task index: " + this.#nowEditing);
                 return true;
             } else {
                 const text = document.getElementById("edittext" + index).value;
@@ -113,11 +110,11 @@ var TaskManager = (function() {
         }
     }
 
-    const _taskAlreadyExist = (text) => {
-        const x = tasks.find(el => el.getName() === text);
+    static taskAlreadyExist = (text) => {
+        const x = this.#tasks.find(el => el.getName() === text);
 
         if(x) {
-            if(nowEditing == x.getId()) {
+            if(this.#nowEditing == x.getId()) {
                 return false;
             } else {
                 ErrorDiv.setErrorInfo("task already exist");
@@ -128,28 +125,14 @@ var TaskManager = (function() {
         }
     }
 
-    const _isAnyImportantTask = () => {
-        const x = tasks.find(el => el.getImportant());
+    static isAnyImportantTask = () => {
+        const x = this.#tasks.find(el => el.getImportant());
         return (x) ? true : false;
     }
 
+    static getTasks = () =>  { return this.#tasks; }
+    static getNowEditing = () =>  { return this.#nowEditing; }
+    static getNumOfTasks = () =>  { return this.#addedCount; }
 
-    return {
-        addTask: _addTask,
-        editTask: _editTask,
-        deleteTask: _deleteTask,
-        confirmEditTask: _confirmEditTask,
-        toggleMaded: _toggleMaded,
-        getAddedCount: _getAddedCount,
-        getNextId: _getNextId,
-        checkIfIdIsUsed: _checkIfIdIsUsed,
-        toggleImportant: _toggleImportant,
-        isAnyImportantTask: _isAnyImportantTask,
+};
 
-        getTasks() { return tasks; },
-        getNowEditing() { return nowEditing; }
-
-   }
-
-
-})();

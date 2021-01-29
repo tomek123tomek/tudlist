@@ -1,13 +1,9 @@
 
 
-var Validator = (function() {
+class Validator {
 
-    const _validateInput = (input) => {
+    static validateInput = (input) => {
         return (input !== '') ? true : false;
     }
 
-    return {
-        validateInput: _validateInput,
-   }
-
-})();
+}

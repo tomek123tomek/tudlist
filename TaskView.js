@@ -1,8 +1,8 @@
 
 
-var TaskView = (function() {
+class TaskView {
 
-    const _getTaskValue = () => {
+    static getTaskValue = () => {
         const value = document.getElementById("input1").value;
         if(Validator.validateInput(value)) {
 			const impo = document.getElementById("impo").checked;
@@ -13,7 +13,7 @@ var TaskView = (function() {
         }
     }
 
-	const _findRemovedTasks = (justRemovedTask) => {
+	static findRemovedTasks = (justRemovedTask) => {
         const tasks = TaskManager.getTasks();
 
 		const el = document.getElementsByClassName("item");
@@ -36,35 +36,46 @@ var TaskView = (function() {
 
     }
 
-    const _clearInput = () => {
+    static clearInput = () => {
         document.getElementById("input1").value = "";
 	}
 
-	const _deleteAllTasks = () => {
+	static deleteAllTasks = () => {
 		const el = document.getElementsByClassName("item");
 
 		while(el.length > 0) {
 			document.getElementById("taskContainer").removeChild(el[el.length - 1]);
 		}
-    }
+	}
 
-    const _updateView = () => {
-		_deleteAllTasks();
+	static removeTask = (task) => {
+		console.log(task);
+		const el = document.getElementsByClassName("item" + task.getId())[0];
+
+		document.getElementById("taskContainer").removeChild(el);
+
+	}
+
+
+
+    static updateView = () => {
+		this.deleteAllTasks();
 
 		const tasks = TaskManager.getTasks();
+		console.log(tasks);
 		let newTasks = [];
 		if(TaskManager.isAnyImportantTask()) {
 			let tasksIm = tasks.filter(el => el.getImportant());
 			let tasksNotIm = tasks.filter(el => !el.getImportant());
 
 			newTasks = [...tasksIm, ...tasksNotIm];
-
-			newTasks.forEach(function(item) {
-				TaskBuilder.createNewTaskView(item.getName(), item.getId());
-			});
 		} else {
 			newTasks = tasks;
 		}
+
+		newTasks.forEach(function(item) {
+			TaskBuilder.createNewTaskView(item.getName(), item.getId());
+		});
 
 
         for (let i = 0; i < newTasks.length; i++) {
@@ -78,6 +89,7 @@ var TaskView = (function() {
 
 				if(element.getName() !== htmlName)
 					document.getElementsByClassName("name" + _nowId)[0].innerHTML = element.getName();
+
 
 				const editText = document.getElementById("edittext" + _nowId);
 
@@ -118,15 +130,7 @@ var TaskView = (function() {
 
 			}
         }
+	}
 
-        //_clearInput();
+}
 
-    }
-
-    return {
-        getTaskValue: _getTaskValue,
-        updateView: _updateView,
-        findRemovedTasks: _findRemovedTasks
-   }
-
-})();

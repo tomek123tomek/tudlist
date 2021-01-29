@@ -1,56 +1,51 @@
 
-var Task = (function () {
+class Task {
 
-    var numOfTasks = 0;
+    #id;
+    #name;
+    #important;
 
-    function checkId(_id) {
+    constructor(_id, _name, _important) {
+        this.setId(_id);
+        this.#name = _name;
+        this.#important = _important;
+    }
+
+    static checkId(_id) {
         return TaskManager.checkIfIdIsUsed(_id);
     }
 
-    return function (name_, important_) {
-
-        var done = false;
-        var important = important_;
-        var id, name;
-
-        this.getNumOfTask = function () {
-            return numOfTasks;
-        };
-
-        this.getId = function () {
-            return id;
-        };
-
-        this.setId = function (id_) {
-            if (!checkId(id_)) throw new Error('Invalid Id.');
-            id = id_;
-        };
-        this.getName = function () {
-            return name;
-        };
-
-        this.setName = function (name_) {
-            name = name_;
-        };
-        this.getDone= function () {
-            return done;
-        };
-
-        this.setDone = function (done_) {
-            done = done_;
-        };
-
-        this.getImportant = function () {
-            return important;
-        };
-
-        this.setImportant = function (important_) {
-            important = important_;
-        };
-
-        this.setId(numOfTasks);
-        this.setName(name_);
-
-        numOfTasks++;
+    getId = () => {
+        return this.#id;
     }
-})();
+
+    setId = (id_) =>  {
+        if (!Task.checkId(id_)) throw new Error('Invalid Id.');
+        this.#id = id_;
+    }
+
+    getName = () =>  {
+        return this.#name;
+    }
+
+    setName = (_name) => {
+        this.#name = _name;
+    }
+    getDone = () =>  {
+        return this.done;
+    }
+
+    setDone = (_done) =>  {
+        this.done = _done;
+    }
+
+    getImportant = () =>  {
+        return this.#important;
+    }
+
+    setImportant = (_important) => {
+        this.#important = _important;
+    }
+
+}
+

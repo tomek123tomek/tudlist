@@ -1,45 +1,45 @@
 
 
-var TaskBuilder = (function() {
+class TaskBuilder {
 
-    var tempMainDiv = null;
+    static #tempMainDiv = null;
 
-    var addedCount = null;
+    static #addedCount = null;
 
-    const _createNewTaskView = (name, id) => {
-        addedCount = id //TaskManager.getNextId();
+    static createNewTaskView = (name, id) => {
+        this.#addedCount = id //TaskManager.getNextId();
 
-        _createMainDiv();
-        _createTaskNameSpan(name);
-        _createDeleteBtn();
-        _createEditTextInput();
-        _createMadedBtn();
-        _createEditBtn();
-        _createOkBtn();
-        _createImportant();
+        this.#createMainDiv();
+        this.#createTaskNameSpan(name);
+        this.#createDeleteBtn();
+        this.#createEditTextInput();
+        this.#createMadedBtn();
+        this.#createEditBtn();
+        this.#createOkBtn();
+        this.#createImportant();
 
     }
 
-    const _createMainDiv = () => {
-        tempMainDiv = document.createElement("div");
-        tempMainDiv.className = "item item" + addedCount;
-        tempMainDiv.setAttribute("id", "item" + addedCount);
+    static #createMainDiv = () => {
+        this.#tempMainDiv = document.createElement("div");
+        this.#tempMainDiv.className = "item item" + this.#addedCount;
+        this.#tempMainDiv.setAttribute("id", "item" + this.#addedCount);
 
-        document.getElementById("taskContainer").appendChild(tempMainDiv);
+        document.getElementById("taskContainer").appendChild(this.#tempMainDiv);
     }
 
-    const _createTaskNameSpan = (name) => {
+    static #createTaskNameSpan = (name) => {
 		const span = document.createElement("span");
-			span.setAttribute("class", "name name" + addedCount);
+			span.setAttribute("class", "name name" + this.#addedCount);
 			span.appendChild(document.createTextNode(name));
 
-        tempMainDiv.appendChild(span);
+        this.#tempMainDiv.appendChild(span);
     }
 
-    const _createDeleteBtn = () => {
+    static #createDeleteBtn = () => {
         const span = document.createElement("span");
-        span.setAttribute("id", "delBtn" + addedCount);
-        span.className = "delBtn delBtn" + addedCount;
+        span.setAttribute("id", "delBtn" + this.#addedCount);
+        span.className = "delBtn delBtn" + this.#addedCount;
         span.appendChild(document.createTextNode("DELETE"));
         span.onclick = function() {
             const index = parseInt(this.id.substr(6));
@@ -47,69 +47,65 @@ var TaskBuilder = (function() {
             TaskManager.deleteTask(name);
 
         }
-        tempMainDiv.appendChild(span);
+        this.#tempMainDiv.appendChild(span);
     }
 
-    const _createEditTextInput = () => {
+    static #createEditTextInput = () => {
         const span = document.createElement("input");
         span.setAttribute("type", "text");
-        span.setAttribute("id", "edittext" + addedCount);
+        span.setAttribute("id", "edittext" + this.#addedCount);
         span.className = "edittext";
 
-        tempMainDiv.appendChild(span);
+        this.#tempMainDiv.appendChild(span);
     }
 
-    const _createMadedBtn = () => {
+    static #createMadedBtn = () => {
 		const span = document.createElement("span");
-			span.className = "madedBtn madedBtn" + addedCount;
-			span.setAttribute("id", "madedBtn" + addedCount);
+			span.className = "madedBtn madedBtn" + this.#addedCount;
+			span.setAttribute("id", "madedBtn" + this.#addedCount);
 			span.appendChild(document.createTextNode("MADED"));
 			span.onclick = function() {
                 const index = parseInt(this.id.substr(8));
 				TaskManager.toggleMaded(index);
 			}
 
-        tempMainDiv.appendChild(span);
+        this.#tempMainDiv.appendChild(span);
     }
 
-    const _createEditBtn = () => {
+    static #createEditBtn = () => {
 		const span = document.createElement("span");
-			span.setAttribute("id", "editBtn" + addedCount);
-			span.className = "editBtn editBtn" + addedCount;
+			span.setAttribute("id", "editBtn" + this.#addedCount);
+			span.className = "editBtn editBtn" + this.#addedCount;
 			span.appendChild(document.createTextNode("EDIT"));
 			span.onclick = function() {
                 const index = parseInt(this.id.substr(7));
 				TaskManager.editTask(index);
 			}
 
-        tempMainDiv.appendChild(span);
+        this.#tempMainDiv.appendChild(span);
     }
 
-    const _createOkBtn = () => {
+    static #createOkBtn = () => {
 		const ok = document.createElement("span");
-			ok.setAttribute("id", "okBtn" + addedCount);
-			ok.classList = "okBtn okBtn" + addedCount;
+			ok.setAttribute("id", "okBtn" + this.#addedCount);
+			ok.classList = "okBtn okBtn" + this.#addedCount;
 			ok.appendChild(document.createTextNode("OK"));
 			ok.onclick = function() {
 				const x = parseInt(this.id.substr(5));
 				TaskManager.confirmEditTask(x);
 			}
 
-        tempMainDiv.appendChild(ok);
+        this.#tempMainDiv.appendChild(ok);
     }
 
-
-    const _createImportant = () => {
+    static #createImportant = () => {
 		const ok = document.createElement("span");
-			ok.setAttribute("id", "importantBtn" + addedCount);
-			ok.classList = "importantBtn importantBtn" + addedCount;
+			ok.setAttribute("id", "importantBtn" + this.#addedCount);
+			ok.classList = "importantBtn importantBtn" + this.#addedCount;
 			ok.appendChild(document.createTextNode("!! IMPORTANT TASK !!"));
 
-        tempMainDiv.appendChild(ok);
+        this.#tempMainDiv.appendChild(ok);
     }
 
-    return {
-        createNewTaskView: _createNewTaskView,
-   }
+}
 
-})();

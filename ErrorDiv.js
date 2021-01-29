@@ -1,12 +1,8 @@
 
-var ErrorDiv = (function () {
+class ErrorDiv {
 
-    const _setErrorInfo = (error) => {
+    static setErrorInfo = (error) => {
         document.getElementById("testPlace").innerHTML = error;
     }
 
-    return {
-        setErrorInfo: _setErrorInfo,
-   }
-
-})();
+}
