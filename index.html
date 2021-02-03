@@ -4,40 +4,56 @@
 	<head>
 		<title>hi</title>
 		<link rel="stylesheet" href='basic.css'>
+		<link rel="stylesheet" href='bootstrap.min.css'>
 		<!--
-			<link rel="stylesheet" href='bootstrap.min.css'>
 			<script src='x.js'></script>
+			<script src='TaskManager.js'></script>
 		<script src='test1.js'></script>-->
+		<script src='View.js'></script>
 		<script src='ErrorDiv.js'></script>
+		<script src='ProjectsManager.js'></script>
+		<script src='Project.js'></script>
 		<script src='Task.js'></script>
 		<script src='Validator.js'></script>
 		<script src='Helpers.js'></script>
 		<script src='TaskBuilder.js'></script>
+		<script src='ProjectBuilder.js'></script>
 		<script src='TaskView.js'></script>
-		<script src='TaskManager.js'></script>
+		<script src='ProjectView.js'></script>
 	</head>
 
 <body>
-
-	<div id="tudlist">
-		<div>Dudu List</div>
-		<input type="text" id="input1">
-		<input type="checkbox" id="impo" name="impo" checked>
-  		<label for="impo">Importante</label>
-		<span onclick="TaskManager.addTask()">Add</span>
+<div class="appCont d-flex align-items-center justify-content-center flex-column">
+	<div id="backToProjects" class="form-group hidden">
+		<input type="button" id="backToProjectsBtn" onclick="ProjectsManager.backToProjects()"
+			class="form-control" value="Back To Projects" />
 	</div>
 
+	<div id="projectList" class="form-group">
+		<h3>Project List</h3>
+		<div class="d-flex">
+			<input type="text" id="projectNameInput" class="form-control">
+			<button onclick="ProjectsManager.addProject()" class="btn btn-primary">Add</button>
+		</div>
+
+	</div>
+
+	<div id="tudlist" class="form-group hidden">
+		<h3><span id="projName"></span> - List of tasks</h3>
+		<input type="text" id="taskNameInput">
+		<input type="checkbox" id="impo" name="impo" checked>
+		  <label for="impo">Important</label>
+		  <button onclick="ProjectsManager.getNowUsing().addTask()" class="btn btn-primary">Add</button>
+	</div>
+
+	<div id="projectContainer"></div>
 	<div id="taskContainer"></div>
 
 	<div id="testPlace"></div>
-
+</div>
 </body>
 
 <script>
-
-	TaskManager.addTask(["av", false]);
-	TaskManager.addTask(["avc", false]);
-	TaskManager.addTask(["avd", true]);
 
 </script>
 

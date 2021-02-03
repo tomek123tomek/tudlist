@@ -12,7 +12,7 @@ class Task {
     }
 
     static checkId(_id) {
-        return TaskManager.checkIfIdIsUsed(_id);
+        return true; //TaskManager.checkIfIdIsUsed(_id);
     }
 
     getId = () => {

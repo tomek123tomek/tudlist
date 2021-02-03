@@ -22,29 +22,30 @@ class TaskBuilder {
 
     static #createMainDiv = () => {
         this.#tempMainDiv = document.createElement("div");
-        this.#tempMainDiv.className = "item item" + this.#addedCount;
-        this.#tempMainDiv.setAttribute("id", "item" + this.#addedCount);
+        this.#tempMainDiv.className = "d-flex taskItem taskItem" + this.#addedCount;
+        this.#tempMainDiv.setAttribute("id", "taskItem" + this.#addedCount);
 
         document.getElementById("taskContainer").appendChild(this.#tempMainDiv);
     }
 
     static #createTaskNameSpan = (name) => {
 		const span = document.createElement("span");
-			span.setAttribute("class", "name name" + this.#addedCount);
+			span.setAttribute("class", "form-control name name" + this.#addedCount);
 			span.appendChild(document.createTextNode(name));
 
         this.#tempMainDiv.appendChild(span);
     }
 
     static #createDeleteBtn = () => {
-        const span = document.createElement("span");
+        const span = document.createElement("input");
+        span.setAttribute("type", "button");
         span.setAttribute("id", "delBtn" + this.#addedCount);
-        span.className = "delBtn delBtn" + this.#addedCount;
-        span.appendChild(document.createTextNode("DELETE"));
+        span.setAttribute("value", "DELETE");
+        span.className = "btn btn-danger delBtn delBtn" + this.#addedCount;
         span.onclick = function() {
             const index = parseInt(this.id.substr(6));
             const name = document.getElementsByClassName("name" + index)[0].innerHTML;
-            TaskManager.deleteTask(name);
+            ProjectsManager.getNowUsing().deleteTask(name);
 
         }
         this.#tempMainDiv.appendChild(span);
@@ -60,26 +61,28 @@ class TaskBuilder {
     }
 
     static #createMadedBtn = () => {
-		const span = document.createElement("span");
-			span.className = "madedBtn madedBtn" + this.#addedCount;
-			span.setAttribute("id", "madedBtn" + this.#addedCount);
-			span.appendChild(document.createTextNode("MADED"));
+		const span = document.createElement("input");
+            span.setAttribute("id", "madedBtn" + this.#addedCount);
+            span.setAttribute("type", "button");
+            span.className = "btn btn-danger madedBtn madedBtn" + this.#addedCount;
+			span.setAttribute("value", "MADED");
 			span.onclick = function() {
                 const index = parseInt(this.id.substr(8));
-				TaskManager.toggleMaded(index);
+				ProjectsManager.getNowUsing().toggleMaded(index);
 			}
 
         this.#tempMainDiv.appendChild(span);
     }
 
     static #createEditBtn = () => {
-		const span = document.createElement("span");
+        const span = document.createElement("input");
+            span.setAttribute("type", "button");
 			span.setAttribute("id", "editBtn" + this.#addedCount);
-			span.className = "editBtn editBtn" + this.#addedCount;
-			span.appendChild(document.createTextNode("EDIT"));
+			span.setAttribute("value", "EDIT");
+			span.className = "btn btn-danger editBtn editBtn" + this.#addedCount;
 			span.onclick = function() {
                 const index = parseInt(this.id.substr(7));
-				TaskManager.editTask(index);
+				ProjectsManager.getNowUsing().editTask(index);
 			}
 
         this.#tempMainDiv.appendChild(span);
@@ -88,11 +91,11 @@ class TaskBuilder {
     static #createOkBtn = () => {
 		const ok = document.createElement("span");
 			ok.setAttribute("id", "okBtn" + this.#addedCount);
-			ok.classList = "okBtn okBtn" + this.#addedCount;
+			ok.classList = "btn btn-danger okBtn okBtn" + this.#addedCount;
 			ok.appendChild(document.createTextNode("OK"));
 			ok.onclick = function() {
 				const x = parseInt(this.id.substr(5));
-				TaskManager.confirmEditTask(x);
+				ProjectsManager.getNowUsing().confirmEditTask(x);
 			}
 
         this.#tempMainDiv.appendChild(ok);
@@ -101,8 +104,8 @@ class TaskBuilder {
     static #createImportant = () => {
 		const ok = document.createElement("span");
 			ok.setAttribute("id", "importantBtn" + this.#addedCount);
-			ok.classList = "importantBtn importantBtn" + this.#addedCount;
-			ok.appendChild(document.createTextNode("!! IMPORTANT TASK !!"));
+			ok.classList = "btn btn-warning importantBtn importantBtn" + this.#addedCount;
+			ok.appendChild(document.createTextNode("!"));
 
         this.#tempMainDiv.appendChild(ok);
     }

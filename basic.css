@@ -6,11 +6,10 @@
 
 
 body {
-    margin: 20px;
+    padding: 20px;
 }
 
-
-#tudlist {
+#tudlist, #projectList {
     margin-bottom: 20px;
 }
 
@@ -32,22 +31,16 @@ body {
 }
 
 
-.item {
+.item, .taskItem {
     margin-bottom: 20px;
 }
 
-.item .name {
+.item .name, .taskItem .name {
     padding: 5px 15px;
     border: 1px solid rgb(128, 108, 82);
 }
 
-
-.item .name.hidden {
-    display: none;
-}
-
-
-.item.maded {
+.taskItem.maded {
     text-decoration: line-through;
 }
 
@@ -56,7 +49,7 @@ body {
 }
 
 
-.delBtn, .okBtn, .madedBtn, .editBtn {
+.delBtn, .okBtn, .madedBtn, .editBtn, .showTasksBtn {
     margin: 0 5px;
     border: 1px solid red;
     padding: 5px;
@@ -68,8 +61,6 @@ body {
 }
 
 
-
-.delBtn.hidden, .editBtn.hidden, .madedBtn.hidden, .importantBtn.hidden {
-    display: none;
+.hidden {
+    display: none !important;
 }
-
