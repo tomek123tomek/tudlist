@@ -15,33 +15,25 @@ class Task {
         return true; //TaskManager.checkIfIdIsUsed(_id);
     }
 
-    getId = () => {
-        return this.#id;
-    }
+    getId = () => this.#id;
 
     setId = (id_) =>  {
         if (!Task.checkId(id_)) throw new Error('Invalid Id.');
         this.#id = id_;
     }
 
-    getName = () =>  {
-        return this.#name;
-    }
+    getName = () => this.#name;
 
     setName = (_name) => {
         this.#name = _name;
     }
-    getDone = () =>  {
-        return this.done;
-    }
+    getDone = () => this.done;
 
     setDone = (_done) =>  {
         this.done = _done;
     }
 
-    getImportant = () =>  {
-        return this.#important;
-    }
+    getImportant = () => this.#important;
 
     setImportant = (_important) => {
         this.#important = _important;

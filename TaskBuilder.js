@@ -45,7 +45,7 @@ class TaskBuilder {
         span.onclick = function() {
             const index = parseInt(this.id.substr(6));
             const name = document.getElementsByClassName("name" + index)[0].innerHTML;
-            ProjectsManager.getNowUsing().deleteTask(name);
+            projectsManager.getNowUsing().deleteTask(name);
 
         }
         this.#tempMainDiv.appendChild(span);
@@ -68,7 +68,7 @@ class TaskBuilder {
 			span.setAttribute("value", "MADED");
 			span.onclick = function() {
                 const index = parseInt(this.id.substr(8));
-				ProjectsManager.getNowUsing().toggleMaded(index);
+				projectsManager.getNowUsing().toggleMaded(index);
 			}
 
         this.#tempMainDiv.appendChild(span);
@@ -82,7 +82,7 @@ class TaskBuilder {
 			span.className = "btn btn-danger editBtn editBtn" + this.#addedCount;
 			span.onclick = function() {
                 const index = parseInt(this.id.substr(7));
-				ProjectsManager.getNowUsing().editTask(index);
+				projectsManager.getNowUsing().editTask(index);
 			}
 
         this.#tempMainDiv.appendChild(span);
@@ -95,7 +95,7 @@ class TaskBuilder {
 			ok.appendChild(document.createTextNode("OK"));
 			ok.onclick = function() {
 				const x = parseInt(this.id.substr(5));
-				ProjectsManager.getNowUsing().confirmEditTask(x);
+				projectsManager.getNowUsing().confirmEditTask(x);
 			}
 
         this.#tempMainDiv.appendChild(ok);

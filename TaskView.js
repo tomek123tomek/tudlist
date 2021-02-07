@@ -1,67 +1,43 @@
 
 
-class TaskView {
+class TaskView extends View {
 
-    static getTaskValue = () => {
-        const value = document.getElementById("taskNameInput").value;
-        if(Validator.validateInput(value)) {
-			const impo = document.getElementById("impo").checked;
-            return [value, impo];
-        } else {
-            alert("EMPTY");
-            return false;
-        }
+	static instance;
+
+	static getInstance = () => {
+
+		if(this.instance) return this.instance;
+
+		this.instance = new TaskView();
+		return this.instance;
+	}
+
+    getTaskValue = () => {
+		return this.getValue("task");
     }
 
-	static findRemovedTasks = (justRemovedTask) => {
-        const tasks = ProjectsManager.getTasks();
-
-		const el = document.getElementsByClassName("taskItem");
-
-		if(tasks.length == 0) {
-			document.getElementById("taskContainer").removeChild(el[0]);
-			return;
-		}
-
-		for(let i = 0; i < el.length; i++) {
-
-			const id = parseInt(el[i].id.substr(4));
-			const taskName = document.getElementsByClassName("name" + id)[0].innerHTML;
-
-			if(justRemovedTask.getName() && (justRemovedTask.getName() === taskName)) {
-				document.getElementById("taskContainer").removeChild(document.getElementById("taskItem" + id));
-				return;
-			}
-		}
-    }
-
-    static clearInput = () => {
+    clearInput = () => {
         document.getElementById("taskNameInput").value = "";
 	}
 
-	static deleteAllTasks = () => {
-		const el = document.getElementsByClassName("taskItem");
-
-		while(el.length > 0) {
-			document.getElementById("taskContainer").removeChild(el[el.length - 1]);
-		}
+	deleteAllTasks = () => {
+		this.deleteAll("task");
 	}
 
-	static removeTask = (task) => {
-		const el = document.getElementsByClassName("taskItem" + task.getId())[0];
-		document.getElementById("taskContainer").removeChild(el);
+	removeTask = (task) => {
+		this.removeItem("task", task);
 	}
 
-	static hideProjectForm = () => {document.getElementById("tudlist").classList.add("hidden");}
-	static showProjectForm = () => {document.getElementById("tudlist").classList.remove("hidden");}
+	hideProjectForm = () => {document.getElementById("tudlist").classList.add("hidden");}
+	showProjectForm = () => {document.getElementById("tudlist").classList.remove("hidden");}
 
-	static showProjectNameHeader = (name) => {document.getElementById("projName").innerHTML = name;}
-	static hideProjectNameHeader = () => {document.getElementById("projName").innerHTML = "";}
+	showProjectNameHeader = (name) => {document.getElementById("projName").innerHTML = name;}
+	hideProjectNameHeader = () => {document.getElementById("projName").innerHTML = "";}
 
-    static updateView = () => {
+    updateView = () => {
 		this.deleteAllTasks();
 
-		const project = ProjectsManager.getNowUsing();
+		const project = projectsManager.getNowUsing();
 
 		let newTasks = [];
 		if(project != null) {

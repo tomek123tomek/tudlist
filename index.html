@@ -25,7 +25,7 @@
 <body>
 <div class="appCont d-flex align-items-center justify-content-center flex-column">
 	<div id="backToProjects" class="form-group hidden">
-		<input type="button" id="backToProjectsBtn" onclick="ProjectsManager.backToProjects()"
+		<input type="button" id="backToProjectsBtn" onclick="projectsManager.backToProjects()"
 			class="form-control" value="Back To Projects" />
 	</div>
 
@@ -33,7 +33,7 @@
 		<h3>Project List</h3>
 		<div class="d-flex">
 			<input type="text" id="projectNameInput" class="form-control">
-			<button onclick="ProjectsManager.addProject()" class="btn btn-primary">Add</button>
+			<button onclick="projectsManager.addProject()" class="btn btn-primary">Add</button>
 		</div>
 
 	</div>
@@ -43,7 +43,7 @@
 		<input type="text" id="taskNameInput">
 		<input type="checkbox" id="impo" name="impo" checked>
 		  <label for="impo">Important</label>
-		  <button onclick="ProjectsManager.getNowUsing().addTask()" class="btn btn-primary">Add</button>
+		  <button onclick="projectsManager.getNowUsing().addTask()" class="btn btn-primary">Add</button>
 	</div>
 
 	<div id="projectContainer"></div>
@@ -54,6 +54,19 @@
 </body>
 
 <script>
+
+	var projectsManager = new ProjectsManager();
+
+	projectsManager.addProject("Test projekt 1");
+	projectsManager.addProject("Test projekt 2");
+	projectsManager.addProject("Test projekt 3");
+
+
+	projectsManager.getProjects().forEach(element => {
+		element.addTask("Test task1");
+		element.addTask("Test task2", true);
+		element.addTask("Test task3");
+	});
 
 </script>
 

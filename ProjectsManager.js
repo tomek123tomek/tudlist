@@ -2,36 +2,42 @@
 
 class ProjectsManager {
 
-    static #projects = [];
+    #projects;
 
-    static #addedCount = 0;
+    #addedCount;
 
-    static #nowUsing = null;
+    #nowUsing;
 
-    static addProject = (name) => {
-        const val = name ? name : ProjectView.getProjectValue();
+    constructor() {
+        this.#projects = [];
+        this.#nowUsing = null;
+        this.#addedCount = 0;
+    }
+
+    addProject = (name) => {
+        const val = name ? name : ProjectView.getInstance().getProjectValue();
         if(!val) return;
         if(this.projectAlreadyExist(val)) return;
         this.#projects.push(new Project(val, this.#addedCount));
 
         this.#addedCount++;
 
-        ProjectView.updateView();
+        ProjectView.getInstance().updateView();
     }
 
-    static showProject = (id) => {
+    showProject = (id) => {
         const x = this.#projects.find(el => el.getId() === id);
         this.#nowUsing = x;
 
         View.updateView();
     }
 
-    static backToProjects = () => {
+    backToProjects = () => {
         this.#nowUsing = null;
         View.updateView();
     }
 
-    static deleteProject = (name) => {
+    deleteProject = (name) => {
         this.#nowUsing = null;
 
         const x = this.#projects.findIndex(el => { console.log(el.getName()); return el.getName() === name});
@@ -40,12 +46,12 @@ class ProjectsManager {
 
         this.#projects.splice(x, 1);
 
-        ProjectView.removeTask(temp);
+        ProjectView.getInstance().removeTask(temp);
 
         View.updateView();
     }
 
-    static projectAlreadyExist = (text) => {
+    projectAlreadyExist = (text) => {
         const x = this.#projects.find(el => el.getName() === text);
         if(x) {
             ErrorDiv.setErrorInfo("task already exist");
@@ -55,8 +61,8 @@ class ProjectsManager {
         }
     }
 
-    static getProjects = () =>  { return this.#projects; }
-    static getNowUsing = () =>  { return this.#nowUsing; }
+    getProjects = () => this.#projects;
+    getNowUsing = () => this.#nowUsing;
 
 }
 

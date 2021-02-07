@@ -20,14 +20,20 @@ class Project {
         this.#addedCount++;
     }
 
-    addTask = (name) => {
-
-        const val = name ? name : TaskView.getTaskValue();
+    addTask = (name, important) => {
+        const val = name ? name : TaskView.getInstance().getTaskValue();
         if(!val) return;
-        if(this.taskAlreadyExist(val[0])) return;
-        this.#tasks.push(new Task(this.#addedCount, val[0], val[1]));
+        if(this.taskAlreadyExist(val)) return;
 
-        TaskView.updateView();
+        let important_ = (important) ?
+            ((important) ? true : false)
+        :
+            (document.getElementById("impo").checked ? true : false)
+
+
+        this.#tasks.push(new Task(this.#addedCount, val, important_));
+
+        TaskView.getInstance().updateView();
 
         this.#addedCount++;
     }
@@ -41,7 +47,7 @@ class Project {
 
         this.#tasks.splice(x, 1);
 
-        TaskView.removeTask(this.#justRemoved);
+        TaskView.getInstance().removeTask(this.#justRemoved);
     }
 
 
@@ -51,7 +57,7 @@ class Project {
 
         this.#nowEditing = x.getId();
 
-        TaskView.updateView();
+        TaskView.getInstance().updateView();
     }
 
 
@@ -59,6 +65,7 @@ class Project {
         if(this.isSomeActionAlready(index)) return;
 
         const text = document.getElementById("edittext" + index).value;
+        if(this.taskAlreadyExist(text)) return;
 
         const x = this.#tasks.find(el => el.getId() === index);
 
@@ -66,7 +73,7 @@ class Project {
 
         this.#nowEditing = null;
 
-        TaskView.updateView();
+        TaskView.getInstance().updateView();
     }
 
     toggleMaded = (index) => {
@@ -74,7 +81,7 @@ class Project {
 
         x.setDone( !x.getDone() );
 
-        TaskView.updateView();
+        TaskView.getInstance().updateView();
     }
 
     taskAlreadyExist = (text) => {
@@ -117,15 +124,15 @@ class Project {
         return (x) ? true : false;
     }
 
-    getNowEditing = () =>  { return this.#nowEditing; }
+    getNowEditing = () => this.#nowEditing;
 
-    getNumOfTasks = () =>  { return this.#addedCount; }
+    getNumOfTasks = () => this.#addedCount;
 
-    getTasks = () =>  { return this.#tasks; }
+    getTasks = () => this.#tasks;
 
-    getName = () => { return this.#name; }
+    getName = () => this.#name;
 
-    getId = () => { return this.#id; }
+    getId = () => this.#id;
 
 };
 

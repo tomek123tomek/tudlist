@@ -40,7 +40,7 @@ class ProjectBuilder {
         span.onclick = function() {
             const index = parseInt(this.id.substr(6));
             const name = document.getElementsByClassName("name" + index)[0].innerHTML;
-            ProjectsManager.deleteProject(name);
+            projectsManager.deleteProject(name);
 
         }
         this.#tempMainDiv.appendChild(span);
@@ -55,7 +55,7 @@ class ProjectBuilder {
             span.className = "btn btn-success showBtn showBtn" + this.#addedCount;
 			span.onclick = function() {
                 const index = parseInt(this.id.substr(12));
-				ProjectsManager.showProject(index);
+				projectsManager.showProject(index);
 			}
 
         this.#tempMainDiv.appendChild(span);
